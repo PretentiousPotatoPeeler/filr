@@ -16,20 +16,20 @@ import java.util.Collection;
 @RestController
 public class FilesController {
 
-    final FilesService filesService;
+    private final FilesService filesService;
 
     @Autowired
     public FilesController(FilesService filesService) {
         this.filesService = filesService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<Collection<Item>> listFiles() throws IOException {
-        Collection<Item> items = filesService.filesList();
+    @GetMapping("/api")
+    public ResponseEntity<Collection<Item>> listFiles(@RequestParam("path") String path) throws IOException {
+        Collection<Item> items = filesService.filesList(path);
         return ResponseEntity.ok(items);
     }
 
-    @PostMapping("/")
+    @PostMapping("/api")
     public ResponseEntity postFile(@RequestParam("file") MultipartFile file) throws IOException {
         filesService.newFile(file);
         return ResponseEntity.ok().build();

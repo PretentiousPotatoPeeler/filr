@@ -26,10 +26,11 @@ public class FilesRepository {
     @Value("${filr.homedir}")
     String homeDir;
 
-    public Collection<Item> listFiles(String username) throws IOException {
+    public Collection<Item> listFiles(String username, String relativePath) throws IOException {
         List<Item> items = new ArrayList<>();
 
-        Path path = getUserHome(username);
+        Path userHome = getUserHome(username);
+        Path path = userHome.resolve(relativePath);
 
         DirectoryStream<Path> paths = Files.newDirectoryStream(path);
         Iterator<Path> iterator = paths.iterator();
@@ -39,6 +40,11 @@ public class FilesRepository {
             Item i = new Item();
             i.setName(p.getFileName().toString());
             i.setDate(Files.getLastModifiedTime(p).toInstant());
+            i.setDir(Files.isDirectory(p));
+
+            String filePath = p.toAbsolutePath().toString().substring(userHome.toString().length());
+
+            i.setPath(filePath);
             items.add(i);
         }
 
@@ -52,7 +58,7 @@ public class FilesRepository {
         logger.info("stored file " + p.toString());
     }
 
-    private Path getUserHome(String username) throws IOException {
+    public Path getUserHome(String username) throws IOException {
         Path path = Paths.get(homeDir).resolve(username);
 
         checkIfDirectoryExists(path, true);

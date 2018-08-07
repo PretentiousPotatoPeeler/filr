@@ -1,0 +1,24 @@
+.title {
+    color: #00b7ff;
+    font-family: Arial, serif;
+    font-weight: bold;
+    border-bottom: gray solid 1px;
+}
+
+.file-item {
+    display: block;
+    float: left;
+    margin: 20px;
+
+    height: 85px;
+    width: 30px;
+}
+
+.file-link {
+
+}
+
+.files {
+    display: block;
+    height: 40px;
+}
